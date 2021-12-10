@@ -46,16 +46,17 @@ const appointments = [
 
 export default function Application(props) {
   
+  const [day, setDay] = useState("Monday");
+  const [days, setDays] = useState([]);
+  
+  const url = 'http://localhost:8001/api/days';
+  
   useEffect(() => {
     axios(url).then(response => {
       setDays(response.data);
     })
   }, []);
 
-  const [day, setDay] = useState("Monday");
-  const [days, setDays] = useState([]);
-  const url = 'http://localhost:8001/api/days';
-  
   const appointmentsMap = appointments.map((appointment) => {
     return (
       <Appointment key={appointment.id} {...appointment} />
