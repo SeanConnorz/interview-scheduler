@@ -18,7 +18,6 @@ const CONFIRM = "CONFIRM";
 const EDIT = "EDIT";
 
 export default function Appointment(props) {
-  console.log('interviewers', props.interviewers)
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
   );
@@ -40,6 +39,10 @@ export default function Appointment(props) {
     transition(CONFIRM);
   };
 
+  const edit = () => {
+    transition(EDIT);
+  };
+
   const onDelete = () => {
     props.cancelInterview(props.id);
     transition(DELETING);
@@ -57,6 +60,7 @@ export default function Appointment(props) {
           student={props.interview.student}
           interviewer={props.interview.interviewer}
           onDelete={confirm}
+          onEdit={edit}
         />
       )}
 
@@ -90,9 +94,11 @@ export default function Appointment(props) {
 
       {mode === EDIT && (
         <Form
-          onConfirm={onDelete}
-          onCancel={back}
-          message='Are you sure you want to delete this appointment?'
+          interviewers={props.interviewers}
+          student={props.interview.student}
+          interviewer={props.interview.interviewer}
+          back = {back}
+          onSave = {save}
         />
       )}
         
