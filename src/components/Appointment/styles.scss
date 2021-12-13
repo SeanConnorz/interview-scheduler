@@ -14,7 +14,6 @@ $appointment-height: 11rem;
 
     &-button {
       @include button-inactive--opacity;
-      object-fit: contain;
 
       &:hover {
         @include button-active--opacity;
@@ -24,11 +23,6 @@ $appointment-height: 11rem;
 
   &__time {
     display: flex;
-  }
-
-  &__footer {
-    display: flex;
-    justify-content: center;
   }
 
   &__separator {
