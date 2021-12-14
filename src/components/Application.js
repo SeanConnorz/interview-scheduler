@@ -4,6 +4,7 @@ import "components/Application.scss";
 import DayList from "components/DayList"
 import Appointment from "components/Appointment"
 import { getAppointmentsForDay, getInterviewersForDay } from "helpers/selectors";
+import useApplicationData from "hooks/useApplicationData"
 import axios from 'axios';
 import useVisualMode from "hooks/useVisualMode";
 
@@ -53,12 +54,14 @@ let error;
 
 export default function Application(props) {
   const { mode, transition, back } = useVisualMode();
-  const [state, setState] = useState({
-    day: "Monday",
-    days: [],
-    appointments: [],
-    interviewers: []
-  });
+  const {
+    state,
+    setState,
+    setDay,
+    bookInterview,
+    cancelInterview,
+    renderDataFunc,
+  } = useApplicationData();
   
   useEffect(() => {
     Promise.all([
@@ -66,32 +69,10 @@ export default function Application(props) {
       axios.get(appointmentsUrl),
       axios.get(interviewersUrl)
     ]).then((all) => {
+      console.log('y')
       setState(prev => ({ ...prev, days: all[0].data, appointments: all[1].data, interviewers: all[2].data}));
     });   
-  }, []);
-
-  const setDay = day => setState({ ...state, day });
-  
-  
-  const bookInterview = (id, interview) => {
-    const appointment = {
-      ...state.appointments[id],
-      interview: { ...interview }
-    };
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment
-    };
-    setState({
-      ...state,
-      appointments
-    })
-    return axios.put(`http://localhost:8001/api/appointments/${id}`, {interview})
-  };
-  
-  const cancelInterview = (appointmentId) => {
-    return axios.delete(`http://localhost:8001/api/appointments/${appointmentId}`)
-  }
+  }, [state.renderData]);
 
   const dailyAppointments = getAppointmentsForDay(state, state.day);
   const appointmentsMap = dailyAppointments.map((appointment, i) => {
