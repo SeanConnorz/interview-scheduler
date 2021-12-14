@@ -5,6 +5,7 @@ import DayList from "components/DayList"
 import Appointment from "components/Appointment"
 import { getAppointmentsForDay, getInterviewersForDay } from "helpers/selectors";
 import axios from 'axios';
+import useVisualMode from "hooks/useVisualMode";
 
 // const appointments = [
 //   {
@@ -48,9 +49,10 @@ import axios from 'axios';
 const daysUrl = 'http://localhost:8001/api/days';
 const appointmentsUrl = 'http://localhost:8001/api/appointments'
 const interviewersUrl = 'http://localhost:8001/api/interviewers'
+let error;
 
 export default function Application(props) {
-  
+  const { mode, transition, back } = useVisualMode();
   const [state, setState] = useState({
     day: "Monday",
     days: [],
@@ -84,11 +86,11 @@ export default function Application(props) {
       ...state,
       appointments
     })
-    axios.put(`http://localhost:8001/api/appointments/${id}`, {interview});
+    return axios.put(`http://localhost:8001/api/appointments/${id}`, {interview})
   };
-
+  
   const cancelInterview = (appointmentId) => {
-    axios.delete(`http://localhost:8001/api/appointments/${appointmentId}`).catch(err => console.log(err));
+    return axios.delete(`http://localhost:8001/api/appointments/${appointmentId}`)
   }
 
   const dailyAppointments = getAppointmentsForDay(state, state.day);

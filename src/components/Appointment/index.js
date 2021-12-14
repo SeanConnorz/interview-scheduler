@@ -6,6 +6,7 @@ import Empty from './Empty.js';
 import Form from './Form';
 import Status from './Status';
 import Confirm from './Confirm.js';
+import Error from './Error.js';
 import useVisualMode from "hooks/useVisualMode";
 
 
@@ -16,22 +17,33 @@ const SAVING = "SAVING";
 const DELETING = "DELETING";
 const CONFIRM = "CONFIRM";
 const EDIT = "EDIT";
+const ERROR_SAVE = "ERROR_SAVE";
+const ERROR_DELETE = "ERROR_DELETE";
 
 export default function Appointment(props) {
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
-  );
+    );
 
-  const save = (name, interviewer) => {
-    const interview = {
-      student: name,
-      interviewer
-    };
+    const save = (name, interviewer) => {
+      const interview = {
+        student: name,
+        interviewer
+      };
+      console.log(props.bookInterview(props.id, interview))
     transition(SAVING);
-    props.bookInterview(props.id, interview);
-    setTimeout(() => {
-      transition(SHOW);
-    }, 1000)
+    props.bookInterview(props.id, interview)
+    .then(() => {
+      setTimeout(() => {
+        transition(SHOW);
+      }, 1000)
+    })
+    .catch(() => {
+      setTimeout(() => {
+        transition(ERROR_SAVE);
+      }, 1000)
+    })
+    
   };
 
   const confirm = () => {
@@ -44,11 +56,19 @@ export default function Appointment(props) {
   };
 
   const onDelete = () => {
-    props.cancelInterview(props.id);
-    transition(DELETING);
-    setTimeout(() => {
-      transition(EMPTY);
-    }, 1000)
+    props.cancelInterview(props.id)
+    .then(() => {
+      transition(DELETING);
+      setTimeout(() => {
+        transition(EMPTY);
+      }, 1000)
+    })
+    .catch(() => {
+      transition(DELETING);
+      setTimeout(() => {
+        transition(ERROR_DELETE);
+      }, 1000)
+    });
   }
 
   return (
@@ -99,6 +119,16 @@ export default function Appointment(props) {
           interviewer={props.interview.interviewer}
           back = {back}
           onSave = {save}
+        />
+      )}
+      {mode === ERROR_DELETE && (
+        <Error
+          message="error with delete"
+        />
+      )}
+      {mode === ERROR_SAVE && (
+        <Error
+          message="error with save"
         />
       )}
         
