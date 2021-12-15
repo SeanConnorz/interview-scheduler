@@ -26,7 +26,9 @@ export default function Form(props) {
             name="name"
             type="text"
             placeholder="Enter Student Name"
-            value={student}/>
+            value={student}
+            data-testid="student-name-input"
+          />
         </form>
         <InterviewerList value={interviewer} onChange={setInterviewer} interviewers={props.interviewers}/>
       </section>
