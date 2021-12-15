@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 
 import "components/Application.scss";
 import DayList from "components/DayList"
@@ -6,7 +6,6 @@ import Appointment from "components/Appointment"
 import { getAppointmentsForDay, getInterviewersForDay } from "helpers/selectors";
 import useApplicationData from "hooks/useApplicationData"
 import axios from 'axios';
-import useVisualMode from "hooks/useVisualMode";
 
 // const appointments = [
 //   {
@@ -50,17 +49,14 @@ import useVisualMode from "hooks/useVisualMode";
 const daysUrl = 'http://localhost:8001/api/days';
 const appointmentsUrl = 'http://localhost:8001/api/appointments'
 const interviewersUrl = 'http://localhost:8001/api/interviewers'
-let error;
 
 export default function Application(props) {
-  const { mode, transition, back } = useVisualMode();
   const {
     state,
     setState,
     setDay,
     bookInterview,
     cancelInterview,
-    renderDataFunc,
   } = useApplicationData();
   
   useEffect(() => {
@@ -69,7 +65,6 @@ export default function Application(props) {
       axios.get(appointmentsUrl),
       axios.get(interviewersUrl)
     ]).then((all) => {
-      console.log('y')
       setState(prev => ({ ...prev, days: all[0].data, appointments: all[1].data, interviewers: all[2].data}));
     });   
   }, [state.renderData]);

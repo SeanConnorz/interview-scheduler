@@ -6,15 +6,15 @@ export default function Form(props) {
   const [student, setStudent] = useState(props.student || "");
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
 
-  const reset = () => {
-    setInterviewer('');
-    setStudent('');
-  }
+  // const reset = () => {
+  //   setInterviewer('');
+  //   setStudent('');
+  // }
 
-  const cancel = () => {
-    reset();
-    props.onCancel();
-  }
+  // const cancel = () => {
+  //   reset();
+  //   props.onCancel();
+  // }
   
   return (
     <main className="appointment__card appointment__card--create">

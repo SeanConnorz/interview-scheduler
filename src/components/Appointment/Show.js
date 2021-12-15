@@ -1,8 +1,6 @@
 import React from 'react';
 
-export default function Show(props) {
-  const { interview, onEdit, onDelete } = props;
-  return (
+export default function Show(props) {  return (
     <main className="appointment__card appointment__card--show">
       <section className="appointment__card-left">
         <h2 className="text--regular">{props.student}</h2>
@@ -14,7 +12,7 @@ export default function Show(props) {
       <section className="appointment__card-right">
         <section className="appointment__actions">
           <img
-            onClick={onEdit}
+            onClick={props.onEdit}
             className="appointment__actions-button"
             src="images/edit.png"
             alt="Edit"
