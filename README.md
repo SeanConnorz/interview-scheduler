@@ -1,6 +1,6 @@
 # Interview Scheduler
 
-## What it is
+## What is it?
 
 Interview scheduler is a web application build with react! It allows users to book interviews. To do so, give your name and select the interviewer you want to work with. Hope you enjoy!
 
