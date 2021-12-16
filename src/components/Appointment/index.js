@@ -25,24 +25,25 @@ export default function Appointment(props) {
     props.interview ? SHOW : EMPTY
     );
 
+    // Saves form value and converts form component to show component
     const save = (name, interviewer) => {
       const interview = {
         student: name,
         interviewer
       };
-    transition(SAVING);
-    props.bookInterview(props.id, interview)
-    .then(() => {
-      transition(SHOW);
-    })
-    .catch(() => {
-      transition(ERROR_SAVE, true);
-    })
-    
+      transition(SAVING);
+      props.bookInterview(props.id, interview)
+      .then(() => {
+        transition(SHOW);
+      })
+      .catch(() => {
+        transition(ERROR_SAVE, true);
+      })
   };
 
+  // Deletes appointment on confirm
   const confirm = () => {
-    transition(DELETING)
+    transition(DELETING, true)
     props.cancelInterview(props.id)
     .then(() => {
       transition(EMPTY);
@@ -52,10 +53,12 @@ export default function Appointment(props) {
     });
   };
 
+  // Transitions to confirm component
   const onDelete = () => {
     transition(CONFIRM);
   }
 
+  // Transitions to form component on edit mode
   const edit = () => {
     transition(EDIT);
   };

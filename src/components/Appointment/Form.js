@@ -15,22 +15,12 @@ export default function Form(props) {
   
     setError("");
     props.onSave(student, interviewer);
-  }
+  };
 
   const onCancel = () => {
     setStudent("");
     props.back();
-  }
-
-  // const reset = () => {
-  //   setInterviewer('');
-  //   setStudent('');
-  // }
-
-  // const cancel = () => {
-  //   reset();
-  //   props.onCancel();
-  // }
+  };
   
   return (
     <main className="appointment__card appointment__card--create">
@@ -58,4 +48,4 @@ export default function Form(props) {
       </section>
     </main>
   );
-}
+};
