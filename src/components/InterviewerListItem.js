@@ -14,6 +14,7 @@ export default function InterviewerListItem(props) {
         className="interviewers__item-image"
         src={avatar}
         alt={name}
+        data-cy='interviewer'
       />
       {props.selected && <>{name}</>}
   </li>

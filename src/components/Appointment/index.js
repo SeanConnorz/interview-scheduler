@@ -59,16 +59,15 @@ export default function Appointment(props) {
   const edit = () => {
     transition(EDIT);
   };
-
-
+  
   return (
     <article className="appointment">
       <Header time={props.time} />
         {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
       {mode === SHOW && (
         <Show
-          student={props.interview.student}
           interviewer={props.interview.interviewer}
+          interviewObj={props.interviewObj}
           onDelete={onDelete}
           onEdit={edit}
         />

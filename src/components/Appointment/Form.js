@@ -13,7 +13,13 @@ export default function Form(props) {
       return;
     }
   
+    setError("");
     props.onSave(student, interviewer);
+  }
+
+  const onCancel = () => {
+    setStudent("");
+    props.back();
   }
 
   // const reset = () => {
@@ -38,6 +44,7 @@ export default function Form(props) {
             placeholder="Enter Student Name"
             value={student}
             data-testid="student-name-input"
+            data-cy="input"
           />
           <section className="appointment__validation">{error}</section>
         </form>
@@ -45,7 +52,7 @@ export default function Form(props) {
       </section>
       <section className="appointment__card-right">
         <section className="appointment__actions">
-          <Button onClick={props.back} danger>Cancel</Button>
+          <Button onClick={onCancel} danger>Cancel</Button>
           <Button onClick={validate} confirm>Save</Button>
         </section>
       </section>

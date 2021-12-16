@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import "components/Application.scss";
 import DayList from "components/DayList"
 import Appointment from "components/Appointment"
-import { getAppointmentsForDay, getInterviewersForDay } from "helpers/selectors";
+import { getAppointmentsForDay, getInterviewersForDay, getInterview } from "helpers/selectors";
 import useApplicationData from "hooks/useApplicationData"
 import axios from 'axios';
 
@@ -80,6 +80,7 @@ export default function Application(props) {
       interviewers={getInterviewersForDay(state, state.day)}
       bookInterview={bookInterview}
       cancelInterview={cancelInterview}
+      interviewObj={getInterview(state, appointment.interview)}
        />
     );
   })
