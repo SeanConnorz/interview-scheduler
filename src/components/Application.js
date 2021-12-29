@@ -1,34 +1,38 @@
 import React, { useEffect } from "react";
 
 import "components/Application.scss";
-import DayList from "components/DayList"
-import Appointment from "components/Appointment"
-import { getAppointmentsForDay, getInterviewersForDay, getInterview } from "helpers/selectors";
-import useApplicationData from "hooks/useApplicationData"
-import axios from 'axios';
+import DayList from "components/DayList";
+import Appointment from "components/Appointment";
+import {
+  getAppointmentsForDay,
+  getInterviewersForDay,
+  getInterview,
+} from "helpers/selectors";
+import useApplicationData from "hooks/useApplicationData";
+import axios from "axios";
 
-const daysUrl = 'http://localhost:8001/api/days';
-const appointmentsUrl = 'http://localhost:8001/api/appointments'
-const interviewersUrl = 'http://localhost:8001/api/interviewers'
+const daysUrl = "http://localhost:8001/api/days";
+const appointmentsUrl = "http://localhost:8001/api/appointments";
+const interviewersUrl = "http://localhost:8001/api/interviewers";
 
 export default function Application() {
-  const {
-    state,
-    setState,
-    setDay,
-    bookInterview,
-    cancelInterview,
-  } = useApplicationData();
-  
+  const { state, setState, setDay, bookInterview, cancelInterview } =
+    useApplicationData();
+
   // Fetches data from api server
   useEffect(() => {
     Promise.all([
       axios.get(daysUrl),
       axios.get(appointmentsUrl),
-      axios.get(interviewersUrl)
+      axios.get(interviewersUrl),
     ]).then((all) => {
-      setState(prev => ({ ...prev, days: all[0].data, appointments: all[1].data, interviewers: all[2].data}));
-    });   
+      setState((prev) => ({
+        ...prev,
+        days: all[0].data,
+        appointments: all[1].data,
+        interviewers: all[2].data,
+      }));
+    });
   }, [state.renderData]);
 
   const dailyAppointments = getAppointmentsForDay(state, state.day);
@@ -36,18 +40,18 @@ export default function Application() {
   // creates appointment components list
   const appointmentsMap = dailyAppointments.map((appointment, i) => {
     return (
-      <Appointment 
-      key={appointment.id} 
-      id={appointment.id}
-      time={appointment.time}
-      interview={appointment.interview}
-      interviewers={getInterviewersForDay(state, state.day)}
-      bookInterview={bookInterview}
-      cancelInterview={cancelInterview}
-      interviewObj={getInterview(state, appointment.interview)}
-       />
+      <Appointment
+        key={appointment.id}
+        id={appointment.id}
+        time={appointment.time}
+        interview={appointment.interview}
+        interviewers={getInterviewersForDay(state, state.day)}
+        bookInterview={bookInterview}
+        cancelInterview={cancelInterview}
+        interviewObj={getInterview(state, appointment.interview)}
+      />
     );
-  })
+  });
 
   return (
     <main className="layout">
@@ -59,11 +63,7 @@ export default function Application() {
         />
         <hr className="sidebar__separator sidebar--centered" />
         <nav className="sidebar__menu">
-          <DayList
-            days={state.days}
-            value={state.day}
-            onChange={setDay}
-          />
+          <DayList days={state.days} value={state.day} onChange={setDay} />
         </nav>
         <img
           className="sidebar__lhl sidebar--centered"
