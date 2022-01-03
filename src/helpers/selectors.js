@@ -32,7 +32,7 @@ export function getInterview(state, interview) {
 export function getInterviewersForDay(state, day) {
   const days = state.days;
   let interviewersId = [];
-  let interviewersInfo = [];
+  const interviewersInfo = [];
 
   days.every((obj) => {
     if (obj.name === day) {

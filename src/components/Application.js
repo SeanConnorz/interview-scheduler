@@ -33,7 +33,7 @@ export default function Application() {
         interviewers: all[2].data,
       }));
     });
-  }, [state.renderData]);
+  }, []);
 
   const dailyAppointments = getAppointmentsForDay(state, state.day);
 

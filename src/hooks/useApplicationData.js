@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 import { useState } from "react";
 
 export default function useApplicationData() {
@@ -7,37 +7,78 @@ export default function useApplicationData() {
     days: [],
     appointments: [],
     interviewers: [],
-    renderData: 1
+    renderData: 1,
   });
-  
+
+  const updateSpots = (stateDays, appointments) => {
+    let counter = 0;
+
+    for (const id of stateDays.appointments) {
+      if (!appointments[id].interview) {
+        counter++;
+      }
+    }
+
+    return counter;
+  };
+
+  const spotCounter = (stateDays, appointments) => {
+    const spotsObj = stateDays.map((day) => {
+      return { ...day, spots: updateSpots(day, appointments) };
+    });
+
+    return spotsObj;
+  };
+
   const bookInterview = (id, interview) => {
     const appointment = {
       ...state.appointments[id],
-      interview: { ...interview }
+      interview: { ...interview },
     };
     const appointments = {
       ...state.appointments,
-      [id]: appointment
+      [id]: appointment,
     };
-    setState({
-      ...state,
-      appointments
-    })
-    return axios.put(`http://localhost:8001/api/appointments/${id}`, {interview}).then(() => {
-      console.log('something')
-      renderDataFunc(state.renderData);
-    })
+    const days = spotCounter(state.days, appointments);
+    return axios
+      .put(`http://localhost:8001/api/appointments/${id}`, { interview })
+      .then(() => {
+        setState({
+          ...state,
+          appointments,
+          days,
+        });
+      });
   };
-  
-  const cancelInterview = (appointmentId) => {
-    return axios.delete(`http://localhost:8001/api/appointments/${appointmentId}`).then(() => renderDataFunc(state.renderData))
-  }
 
-  const renderDataFunc = (renderData) => {
-    setState(prev => ({...prev, renderData: renderData + 1 }));
-  }
+  const cancelInterview = (id) => {
+    const appointment = {
+      ...state.appointments[id],
+      interview: null,
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment,
+    };
+    const days = spotCounter(state.days, appointments);
+    return axios
+      .delete(`http://localhost:8001/api/appointments/${id}`)
+      .then(() => {
+        setState({
+          ...state,
+          appointments,
+          days,
+        });
+      });
+  };
 
-  const setDay = day => setState({ ...state, day });
+  const setDay = (day) => setState({ ...state, day });
 
-  return {renderDataFunc, state, setState, bookInterview, cancelInterview, setDay}
+  return {
+    state,
+    setState,
+    bookInterview,
+    cancelInterview,
+    setDay,
+  };
 }
